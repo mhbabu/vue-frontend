@@ -176,28 +176,29 @@ export default {
         formData.append("title", product.value.title);
         if (!isEdit.value) {
           formData.append("status", product.value.status);
-          formData.append("categories", selectedCategories.value);
-          formData.append("features", product.value.features);
+          formData.append( "categories", selectedCategories.value.map((item) => item.id) );
+          formData.append("features", product.value.features.map((item) => item));
         }
 
         if (imageFile.value) {
           formData.append("image", imageFile.value);
         }
 
-        const url = isEdit.value
-          ? `http://127.0.0.1:8000/api/products/${route.params.id}`
-          : "http://127.0.0.1:8000/api/products";
-        const method = isEdit.value ? "put" : "post";
-
-        await axios({
-          method,
-          url,
-          data: formData,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
+        if (isEdit.value) {
+          await axios.put(`http://127.0.0.1:8000/api/products/${route.params.id}`, formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+        } else {
+          await axios.post("http://127.0.0.1:8000/api/products", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+        }
         router.push("/products");
       } catch (error) {
         if (error.response && error.response.data.errors) {
