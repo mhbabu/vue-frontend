@@ -174,6 +174,7 @@ export default {
       try {
         const formData = new FormData();
         formData.append("title", product.value.title);
+
         if (!isEdit.value) {
           formData.append("status", product.value.status);
           formData.append( "categories", selectedCategories.value.map((item) => item.id) );
