@@ -181,12 +181,15 @@ export default {
           formData.append("features", product.value.features.map((item) => item));
         }
 
+        
+
         if (imageFile.value) {
           formData.append("image", imageFile.value);
         }
 
         if (isEdit.value) {
-          await axios.put(`http://127.0.0.1:8000/api/products/${route.params.id}`, formData,
+          formData.append("_method", "put");
+          await axios.post(`http://127.0.0.1:8000/api/products/${route.params.id}`, formData,
             {
               headers: {
                 "Content-Type": "multipart/form-data",
